@@ -1,10 +1,12 @@
+spec: v1
+
 services:
   - type: web
     name: portal-inmobiliario
     plan: free
     autoDeploy: true
 
-    buildCommand: dotnet publish ./Portal-Inmobiliario.csproj -c Release -o out
+    buildCommand: dotnet publish -c Release -o out
     startCommand: dotnet out/Portal-Inmobiliario.dll
     healthCheckPath: /
 
@@ -13,6 +15,6 @@ services:
         value: Production
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:${PORT}
-      # Ojo: sin disco será NO persistente:
+      # SQLite en el mismo directorio (persistencia efímera en Free)
       - key: ConnectionStrings__DefaultConnection
         value: Data Source=portal.db
