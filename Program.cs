@@ -14,7 +14,12 @@ builder.Services
     {
         options.SignIn.RequireConfirmedAccount = false;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+    builder.Services.ConfigureApplicationCookie(o =>
+{
+    o.AccessDeniedPath = "/Home/AccesoDenegado";
+});
 var redisCnx = builder.Configuration["Redis:ConnectionString"];
 if (!string.IsNullOrWhiteSpace(redisCnx))
 {
@@ -39,8 +44,24 @@ var app = builder.Build();
 // SEED al iniciar (top-level admite await)
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await Seed.RunAsync(db);
+    var services = scope.ServiceProvider;
+
+    // 1) Crear rol "Broker" si no existe
+    var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();
+    if (!await roleMgr.RoleExistsAsync("Broker"))
+        await roleMgr.CreateAsync(new IdentityRole("Broker"));
+
+    // 2) Crear usuario demo y agregarlo al rol Broker
+    var userMgr = services.GetRequiredService<UserManager<IdentityUser>>();
+    var email = "broker@demo.local";
+    var user = await userMgr.FindByEmailAsync(email);
+    if (user is null)
+    {
+        user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+        await userMgr.CreateAsync(user, "Pass123$"); // contraseña de prueba
+    }
+    if (!await userMgr.IsInRoleAsync(user, "Broker"))
+        await userMgr.AddToRoleAsync(user, "Broker");
 }
 
 if (app.Environment.IsDevelopment())
@@ -56,9 +77,10 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

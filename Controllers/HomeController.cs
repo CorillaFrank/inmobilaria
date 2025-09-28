@@ -5,7 +5,7 @@ using Portal_Inmobiliario.Models;
 namespace Portal_Inmobiliario.Controllers;
 
 public class HomeController : Controller
-{
+{   public IActionResult AccesoDenegado() => View();
     private readonly ILogger<HomeController> _logger;
 
     public HomeController(ILogger<HomeController> logger)
