@@ -1,11 +1,12 @@
 services:
   - type: web
     name: portal-inmobiliario
-    runtime: dotnet
+    env: dotnet
     plan: free
     buildCommand: |
       dotnet restore
-      dotnet publish -c Release -o out
+      # si tu .csproj NO está en la raíz, pon la ruta explícita:
+      dotnet publish Portal-Inmobiliario/Portal-Inmobiliario.csproj -c Release -o out
     startCommand: dotnet out/Portal-Inmobiliario.dll
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
@@ -15,7 +16,7 @@ services:
       - key: ConnectionStrings__DefaultConnection
         value: "Data Source=/tmp/portal.db"
       - key: Redis__ConnectionString
-        value: "" # ← SIN Redis (fallback a memoria)
+        value: "" # sin Redis -> usa caché en memoria
       - key: DOTNET_CLI_TELEMETRY_OPTOUT
         value: "1"
       - key: DOTNET_NOLOGO
