@@ -45,9 +45,12 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
+     // 1) Migrar la base (crea AspNetUsers, AspNetRoles, etc.)
+    var db = services.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
     // 1) Crear rol "Broker" si no existe
     var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();
+    
     if (!await roleMgr.RoleExistsAsync("Broker"))
         await roleMgr.CreateAsync(new IdentityRole("Broker"));
 
