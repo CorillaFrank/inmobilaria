@@ -1,4 +1,4 @@
-spec: v1
+version: "1"
 
 services:
   - type: web
@@ -15,6 +15,5 @@ services:
         value: Production
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:${PORT}
-      # SQLite en el mismo directorio (persistencia efímera en Free)
       - key: ConnectionStrings__DefaultConnection
         value: Data Source=portal.db
