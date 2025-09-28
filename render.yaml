@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: portal-inmobiliario
+    runtime: dotnet
+    region: oregon
+    plan: free
+    buildCommand: "dotnet publish -c Release -o out"
+    startCommand: "dotnet out/Portal-Inmobiliario.dll"
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:${PORT}
+      # SQLite en el contenedor (EF lo crea si no existe)
+      - key: ConnectionStrings__DefaultConnection
+        value: "Data Source=/tmp/portal.db"
+      # Si no tienes Redis, déjala vacía (tu Program.cs cae a memoria)
+      - key: Redis__ConnectionString
+        value: ""
