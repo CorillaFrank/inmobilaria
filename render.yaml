@@ -1,7 +1,6 @@
 services:
   - type: web
     name: portal-inmobiliario
-    env: nixpacks # usa Nixpacks para compilar .NET
     plan: free
     autoDeploy: true
 
@@ -9,19 +8,11 @@ services:
     startCommand: dotnet out/Portal-Inmobiliario.dll
     healthCheckPath: /
 
-    disk:
-      name: data
-      mountPath: /var/data
-      sizeGB: 1
-
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:${PORT}
+      # Ojo: sin disco será NO persistente:
       - key: ConnectionStrings__DefaultConnection
-        value: Data Source=/var/data/portal.db
-      - key: DOTNET_CLI_TELEMETRY_OPTOUT
-        value: "1"
-      - key: DOTNET_NOLOGO
-        value: "1"
+        value: Data Source=portal.db

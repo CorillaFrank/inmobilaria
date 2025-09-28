@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PortalInmobiliario.Data;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +26,9 @@ if (!string.IsNullOrWhiteSpace(redisCnx))
 }
 else
 {
-    builder.Services.AddDistributedMemoryCache();
+    builder.Services.AddDistributedMemoryCache();  // fallback sin Redis
 }
+
 // Session
 builder.Services.AddSession(o =>
 {
