@@ -1,7 +1,7 @@
 services:
   - type: web
     name: portal-inmobiliario
-    env: nixpacks
+    env: nixpacks # usa Nixpacks para compilar .NET
     plan: free
     autoDeploy: true
 
@@ -10,9 +10,9 @@ services:
     healthCheckPath: /
 
     disk:
-      - name: data
-        mountPath: /var/data
-        sizeGB: 1
+      name: data
+      mountPath: /var/data
+      sizeGB: 1
 
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
