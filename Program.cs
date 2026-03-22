@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// prueba para ver la rama en network
 builder.Services
     .AddDefaultIdentity<IdentityUser>(options =>
     {
