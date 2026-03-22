@@ -8,11 +8,11 @@
 
 <form method="get" class="row g-2 mb-3">
   <div class="col-md-3">
-    <label class="form-label">Ciudad</label>
+    <label class="form-label">Ciudades</label>
     <input asp-for="Filtros.Ciudad" class="form-control" />
   </div>
   <div class="col-md-3">
-    <label class="form-label">Tipo</label>
+    <label class="form-label">Tipo de tipos</label>
     <select asp-for="Filtros.Tipo" class="form-select"
             asp-items="Html.GetEnumSelectList<TipoInmueble>()">
       <option value="">(Todos)</option>
